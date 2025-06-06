@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Multimedia Editor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-sliders-h"></i> Editor</h2>
+            </div>
+            <div class="sidebar-tabs">
+                <button class="tab-btn active" data-tab="image-tab"><i class="fas fa-image"></i> Image</button>
+                <button class="tab-btn" data-tab="video-tab"><i class="fas fa-video"></i> Video</button>
+                <button class="tab-btn" data-tab="audio-tab"><i class="fas fa-music"></i> Audio</button>
+                <button class="tab-btn" data-tab="effects-tab"><i class="fas fa-magic"></i> Effects</button>
+                <button class="tab-btn" data-tab="export-tab"><i class="fas fa-file-export"></i> Export</button>
+            </div>
+            <div class="tab-content active" id="image-tab">
+                <!-- Image editing tools will be loaded here -->
+            </div>
+            <div class="tab-content" id="video-tab">
+                <!-- Video editing tools will be loaded here -->
+            </div>
+            <div class="tab-content" id="audio-tab">
+                <!-- Audio editing tools will be loaded here -->
+            </div>
+            <div class="tab-content" id="effects-tab">
+                <!-- Effects tools will be loaded here -->
+            </div>
+            <div class="tab-content" id="export-tab">
+                <!-- Export options will be loaded here -->
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="toolbar">
+                <div class="toolbar-left">
+                    <button id="open-file" class="tool-btn"><i class="fas fa-folder-open"></i> Open</button>
+                    <button id="save-file" class="tool-btn"><i class="fas fa-save"></i> Save</button>
+                    <button id="undo" class="tool-btn"><i class="fas fa-undo"></i> Undo</button>
+                    <button id="redo" class="tool-btn"><i class="fas fa-redo"></i> Redo</button>
+                </div>
+                <div class="toolbar-right">
+                    <button id="zoom-in" class="tool-btn"><i class="fas fa-search-plus"></i></button>
+                    <button id="zoom-out" class="tool-btn"><i class="fas fa-search-minus"></i></button>
+                    <button id="fullscreen" class="tool-btn"><i class="fas fa-expand"></i></button>
+                </div>
+            </header>
+
+            <div class="workspace">
+                <div class="canvas-container">
+                    <canvas id="main-canvas"></canvas>
+                    <div class="overlay-controls">
+                        <div class="transform-controls">
+                            <div class="control-point top-left"></div>
+                            <div class="control-point top-center"></div>
+                            <div class="control-point top-right"></div>
+                            <div class="control-point middle-left"></div>
+                            <div class="control-point middle-right"></div>
+                            <div class="control-point bottom-left"></div>
+                            <div class="control-point bottom-center"></div>
+                            <div class="control-point bottom-right"></div>
+                            <div class="rotate-control"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-container">
+                    <div class="timeline-header">
+                        <span>Timeline</span>
+                        <div class="timeline-zoom">
+                            <button id="timeline-zoom-out"><i class="fas fa-search-minus"></i></button>
+                            <input type="range" id="timeline-zoom-slider" min="1" max="100" value="50">
+                            <button id="timeline-zoom-in"><i class="fas fa-search-plus"></i></button>
+                        </div>
+                    </div>
+                    <div class="timeline">
+                        <div class="track video-track">
+                            <div class="track-header">Video</div>
+                            <div class="track-content"></div>
+                        </div>
+                        <div class="track audio-track">
+                            <div class="track-header">Audio</div>
+                            <div class="track-content"></div>
+                        </div>
+                        <div class="track effects-track">
+                            <div class="track-header">Effects</div>
+                            <div class="track-content"></div>
+                        </div>
+                    </div>
+                    <div class="timeline-controls">
+                        <button id="play-pause"><i class="fas fa-play"></i></button>
+                        <button id="rewind"><i class="fas fa-backward"></i></button>
+                        <button id="forward"><i class="fas fa-forward"></i></button>
+                        <input type="range" id="timeline-scrubber" min="0" max="100" value="0">
+                        <span id="current-time">00:00:00</span>/<span id="total-time">00:00:00</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Panel -->
+        <aside class="right-panel">
+            <div class="panel-tabs">
+                <button class="panel-tab-btn active" data-panel="layers"><i class="fas fa-layer-group"></i> Layers</button>
+                <button class="panel-tab-btn" data-panel="properties"><i class="fas fa-sliders-h"></i> Properties</button>
+                <button class="panel-tab-btn" data-panel="history"><i class="fas fa-history"></i> History</button>
+            </div>
+            <div class="panel-content active" id="layers-panel">
+                <div class="layers-list">
+                    <!-- Layers will be added here dynamically -->
+                </div>
+                <button id="add-layer" class="panel-btn"><i class="fas fa-plus"></i> Add Layer</button>
+            </div>
+            <div class="panel-content" id="properties-panel">
+                <div class="properties-section">
+                    <h3>Transform</h3>
+                    <div class="property-group">
+                        <label>Position X</label>
+                        <input type="number" id="pos-x" class="property-input">
+                    </div>
+                    <div class="property-group">
+                        <label>Position Y</label>
+                        <input type="number" id="pos-y" class="property-input">
+                    </div>
+                    <div class="property-group">
+                        <label>Rotation</label>
+                        <input type="number" id="rotation" class="property-input">
+                    </div>
+                    <div class="property-group">
+                        <label>Scale X</label>
+                        <input type="number" id="scale-x" class="property-input" step="0.1" value="1">
+                    </div>
+                    <div class="property-group">
+                        <label>Scale Y</label>
+                        <input type="number" id="scale-y" class="property-input" step="0.1" value="1">
+                    </div>
+                </div>
+                <div class="properties-section">
+                    <h3>Appearance</h3>
+                    <div class="property-group">
+                        <label>Opacity</label>
+                        <input type="range" id="opacity" class="property-input" min="0" max="100" value="100">
+                    </div>
+                    <div class="property-group">
+                        <label>Blend Mode</label>
+                        <select id="blend-mode" class="property-input">
+                            <option value="normal">Normal</option>
+                            <option value="multiply">Multiply</option>
+                            <option value="screen">Screen</option>
+                            <option value="overlay">Overlay</option>
+                            <option value="darken">Darken</option>
+                            <option value="lighten">Lighten</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-content" id="history-panel">
+                <div class="history-list">
+                    <!-- History items will be added here dynamically -->
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="file-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Open File</h2>
+            <div class="file-browser">
+                <div class="file-options">
+                    <button class="file-option active" data-type="image">Images</button>
+                    <button class="file-option" data-type="video">Videos</button>
+                    <button class="file-option" data-type="audio">Audio</button>
+                    <button class="file-option" data-type="project">Projects</button>
+                </div>
+                <div class="file-list">
+                    <!-- Files will be listed here -->
+                </div>
+                <div class="file-preview">
+                    <div class="preview-container">
+                        <img id="file-preview-img" src="" alt="Preview">
+                        <video id="file-preview-video" controls style="display: none;"></video>
+                    </div>
+                    <div class="file-info">
+                        <h3 id="file-name">No file selected</h3>
+                        <p id="file-size">-</p>
+                        <p id="file-dimensions">-</p>
+                        <p id="file-type">-</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-open" class="modal-btn">Cancel</button>
+                <button id="confirm-open" class="modal-btn primary">Open</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="export-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Export Settings</h2>
+            <div class="export-options">
+                <div class="export-format">
+                    <h3>Format</h3>
+                    <div class="format-options">
+                        <label><input type="radio" name="export-format" value="png" checked> PNG</label>
+                        <label><input type="radio" name="export-format" value="jpg"> JPEG</label>
+                        <label><input type="radio" name="export-format" value="gif"> GIF</label>
+                        <label><input type="radio" name="export-format" value="mp4"> MP4</label>
+                        <label><input type="radio" name="export-format" value="webm"> WebM</label>
+                    </div>
+                </div>
+                <div class="export-quality">
+                    <h3>Quality</h3>
+                    <input type="range" id="quality-slider" min="1" max="100" value="90">
+                    <span id="quality-value">90%</span>
+                </div>
+                <div class="export-resolution">
+                    <h3>Resolution</h3>
+                    <select id="resolution-preset">
+                        <option value="custom">Custom</option>
+                        <option value="4k">4K (3840×2160)</option>
+                        <option value="1080p" selected>Full HD (1920×1080)</option>
+                        <option value="720p">HD (1280×720)</option>
+                        <option value="480p">SD (854×480)</option>
+                    </select>
+                    <div class="custom-resolution">
+                        <input type="number" id="export-width" value="1920" min="1">
+                        <span>x</span>
+                        <input type="number" id="export-height" value="1080" min="1">
+                        <label><input type="checkbox" id="maintain-aspect"> Maintain Aspect Ratio</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-export" class="modal-btn">Cancel</button>
+                <button id="confirm-export" class="modal-btn primary">Export</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
